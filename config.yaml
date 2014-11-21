@@ -1,0 +1,20 @@
+
+telecommand: 
+  - id   : 1
+    code  : ROSO
+    name : Rover_set_operation_mode
+    description : ...
+    params : 1
+    ranges : 1,5
+  - id   : 1
+    code  : ROSO
+    name : Rover_set_operation_mode
+    description : ...
+    params : 1
+    ranges : 1,5
+  - id   : 1
+    code  : ROSO
+    name : Rover_set_operation_mode
+    description : ...
+    params : 1
+    ranges : 1,5
