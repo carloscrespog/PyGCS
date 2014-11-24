@@ -1,20 +1,99 @@
 
 telecommand: 
+  - id   : 0
+    code  : LOST
+    name : Locomotion_Stop
+    description : ...
+    params : 0
+    ranges : 0
   - id   : 1
     code  : ROSO
     name : Rover_set_operation_mode
     description : ...
-    params : 1
+    params : Mode
     ranges : 1,5
-  - id   : 1
-    code  : ROSO
-    name : Rover_set_operation_mode
+  - id   : 2
+    code  : RODG
+    name : Rover_Diagnose
     description : ...
-    params : 1
-    ranges : 1,5
-  - id   : 1
-    code  : ROSO
-    name : Rover_set_operation_mode
+    params : 0
+    ranges : 0
+  - id   : 3
+    code  : CARD
+    name : Camera_Read_IMAGE
     description : ...
-    params : 1
-    ranges : 1,5
+    params : CameraIdentifier,ImageFormat,ColourMode,CompressionType,CompressionLevel,DownampleMode
+    ranges : 11,13,1,5,1,2,1,4,1,100,1,2
+  - id   : 4
+    code  : TFRD
+    name : TOF_Read_DEM
+    description : ...
+    params : 0
+    ranges : 0
+  - id   : 5
+    code  : GNRC
+    name : GNC_READ_DEM
+    description : ...
+    params : 0
+    ranges : 0
+  - id   : 6
+    code  : PMPT
+    name : PTU_Move_To_Pan_Tilt
+    description : ...
+    params : PanAngle,TiltAngle
+    ranges : -155,155,-40,30
+  - id   : 7
+    code  : PMHO
+    name : PTU_Move_To_Home
+    description : ...
+    params : 0
+    ranges : 0
+  - id   : 8
+    code  : LOHO
+    name : Locomotion_Move_To_Home
+    description : ...
+    params : 0
+    ranges : 0
+  - id   : 9
+    code  : LOMT
+    name : Locomotion_Move_To
+    description : ...
+    params : PosX,PosY,HeadingOrientation,Speed
+    ranges : 0,9,0,9,-90,90,0,0.1
+  - id   : 10
+    code  : LOMC
+    name : Locomotion_Move_Crab
+    description : ...
+    params : RoverVelocity,CrabAngle
+    ranges : 0,0.1,-12,12
+  - id   : 11
+    code  : LOMA
+    name : Locomotion_Move_Ackermann
+    description : ...
+    params : RoverVelocity,VirtualAngle
+    ranges : 0,0.1,-12,12
+  - id   : 12
+    code  : LORO
+    name : Locomotion_Skid_Rotate_To
+    description : ...
+    params : RotationAngle
+    ranges : -90,90
+  - id   : 13
+    code  : LORT
+    name : Locomotion_Point_Rotate_To
+    description : ...
+    params : RotationAngle
+    ranges : -90,90
+  - id   : 14
+    code  : LOWM
+    name : Locomotion_Wheel_Move
+    description : ...
+    params : Wheel1Vel,Wheel2Vel,Wheel3Vel,Wheel4Vel
+    ranges : -40,40,-40,40,-40,40,-40,40
+  - id   : 15
+    code  : LOWS
+    name : Locomotion_Wheel_Steer_To
+    description : ...
+    params : WheelNo,SteeringPosAngle,Velocity
+    ranges : 1,4,-12,12,-20,20
+
