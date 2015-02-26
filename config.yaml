@@ -122,3 +122,53 @@ telemanipulation:
     description : ...
     params : RotationSpeed
     ranges : 0,2
+rtcc: 
+  - id   : 30
+    code  : LOST
+    name : Locomotion_Stop
+    description : ...
+    params : 0
+    ranges : 0
+  - id   : 31
+    code  : ROSO
+    name : Rover_set_operation_mode
+    description : ...
+    params : Mode
+    ranges : 1,5
+  - id   : 32
+    code  : LOMC
+    name : Locomotion_Move_Crab
+    description : ...
+    params : RoverVelocity,CrabAngle
+    ranges : 0,30,-12,12
+  - id   : 33
+    code  : LOHO
+    name : Locomotion_Homing
+    description : ...
+    params : 0
+    ranges : 0
+  - id   : 34
+    code  : LOWA
+    name : Locomotion_Wheel_MoveAndSteer
+    description : ...
+    params : Wheel1Vel,Wheel2Vel,Wheel3Vel,Wheel4Vel,Wheel1Ang,Wheel2Ang,Wheel3Ang,Wheel4Ang
+    ranges : -40,40,-40,40,-40,40,-40,40,-12,12,-12,12,-12,12,-12,12
+  - id   : 35
+    code  : LORT
+    name : Locomotion_Point_Turn
+    description : ...
+    params : Velocity,RotationAngle
+    ranges : -30 ,30 ,-30,10
+    # RotationAngle= 30 for point turn
+  - id   : 36
+    code  : LORO
+    name : Locomotion_Skid_Turn
+    description : ...
+    params : Velocity
+    ranges : -30 ,30
+  - id   : 37
+    code  : LOWM
+    name : Locomotion_Wheel_Move
+    description : ...
+    params : Wheel1Vel,Wheel2Vel,Wheel3Vel,Wheel4Vel
+    ranges : -40,40,-40,40,-40,40,-40,40

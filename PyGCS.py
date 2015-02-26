@@ -14,15 +14,25 @@ class MyFrame(wx.Frame):
     
     def __init__(self, parent, id, title):
         self.parent=parent
+
+        self.flagOnlyRTCC=True
+
         self.LRM_IP='192.168.1.200'
         self.LRM_TC_PORT=7131
         self.LRM_TM_PORT=7133
         self.LRM_TLM_PORT=7135
         self.LRM_TLM_TM_PORT=7136
+
+        self.LRM_RTCC_IP='192.168.1.201'
+        self.LRM_RTCC_TC_PORT=3333
+        self.LRM_RTCC_ACK_PORT=3334
+        self.LRM_RTCC_TLM_PORT=3335
+
         WINDOW_RATIO=4/5.
         self.BUFFER_SIZE = 1024
         self.commandCount=1
         self.TLM_OFFSET=20
+        self.RTCC_OFFSET=30
 
         wx.Frame.__init__(self, parent, id, title, pos=(0,0), size=wx.DisplaySize())
 
@@ -40,6 +50,7 @@ class MyFrame(wx.Frame):
         self.visualMatrix = []
         self.populateGUI(self.config["telecommand"])
         self.populateGUI(self.config["telemanipulation"])
+        self.populateGUI(self.config["rtcc"])
 
         self.commandsPanel.SetSizer(self.vbox)
         self.connect()
@@ -48,16 +59,20 @@ class MyFrame(wx.Frame):
 
 
     def connect(self):
-        self.upLink=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        self.downLink=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        self.upLinkTLM=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        self.downLinkTLM=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-
-        self.upLink.connect((self.LRM_IP,self.LRM_TC_PORT))
-        self.downLink.connect((self.LRM_IP,self.LRM_TM_PORT))
-        self.upLinkTLM.connect((self.LRM_IP,self.LRM_TLM_PORT))
-        self.downLinkTLM.connect((self.LRM_IP,self.LRM_TLM_TM_PORT))
-
+        if not self.flagOnlyRTCC:
+            self.upLink=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+            self.downLink=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+            self.upLinkTLM=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+            self.downLinkTLM=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+            
+            self.upLink.connect((self.LRM_IP,self.LRM_TC_PORT))
+            self.downLink.connect((self.LRM_IP,self.LRM_TM_PORT))
+            self.upLinkTLM.connect((self.LRM_IP,self.LRM_TLM_PORT))
+            self.downLinkTLM.connect((self.LRM_IP,self.LRM_TLM_TM_PORT))
+        self.upLinkRTCC=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+        self.upLinkRTCC.connect((self.LRM_RTCC_IP,self.LRM_RTCC_TC_PORT))
+    
+        
     def sendCommand (self,command):
         commandLine=str(self.commandCount)+' CSPFSTC TR PFS '+command+'\n'
         self.commandCount+=1
@@ -75,6 +90,13 @@ class MyFrame(wx.Frame):
         # data=self.downLink.recv(self.BUFFER_SIZE)
         # print data
         # self.consolePanel.append(command+" -> "+data)
+
+    def sendCommandRTCC (self,command):
+        commandLine=str(self.commandCount)+' RTPFSTC TR PFS '+command+'\n'
+        self.commandCount+=1
+        print commandLine
+        self.upLinkRTCC.send(commandLine)
+        
 
     def populateGUI(self,commands):
         # print config
@@ -105,8 +127,12 @@ class MyFrame(wx.Frame):
                     hbox.Add(paramText,-1,wx.ALL,5)
                     hbox.Add(paramFloatSpin,-1,wx.ALL,5)
             #TLM condition
-            if (i["id"]>=self.TLM_OFFSET): #isTLM
+            if (i["id"]>=self.RTCC_OFFSET): #isRTCC
+                self.Bind(wx.EVT_BUTTON,self.buttonPressedRTCC,button)
+                
+            elif (i["id"]>=self.TLM_OFFSET): #isTLM
                 self.Bind(wx.EVT_BUTTON,self.buttonPressedTM,button)
+
             else:
                 self.Bind(wx.EVT_BUTTON,self.buttonPressed,button)
             self.vbox.Add(hbox,1,wx.ALL,5)
@@ -122,8 +148,8 @@ class MyFrame(wx.Frame):
             for idx,param in enumerate(params.split(',')):
                 commandLine+= str(self.FindWindowById(100*event.GetId()+idx).GetValue())
                 commandLine+=' '
-
-        self.sendCommand(commandLine)
+        if not self.flagOnlyRTCC:
+            self.sendCommand(commandLine)
 
     def buttonPressedTM(self,event):
         commandLine=''
@@ -136,8 +162,22 @@ class MyFrame(wx.Frame):
             for idx,param in enumerate(params.split(',')):
                 commandLine+= str(self.FindWindowById(100*event.GetId()+idx).GetValue())
                 commandLine+=' '
+        if not self.flagOnlyRTCC:
+            self.sendCommandTLM(commandLine)
 
-        self.sendCommandTLM(commandLine)
+    def buttonPressedRTCC(self,event):
+        commandLine=''
+        commandLine+=self.config["rtcc"][event.GetId()-self.RTCC_OFFSET]["code"]
+        commandLine+=' '
+        params=self.config["rtcc"][event.GetId()-self.RTCC_OFFSET]["params"]
+        if params==0:
+            pass
+        else:
+            for idx,param in enumerate(params.split(',')):
+                commandLine+= str(self.FindWindowById(100*event.GetId()+idx).GetValue())
+                commandLine+=' '
+
+        self.sendCommandRTCC(commandLine)
 
 
 class Terminal(scrolled.ScrolledPanel):
