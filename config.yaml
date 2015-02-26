@@ -22,7 +22,7 @@ telecommand:
     code  : CARD
     name : Camera_Read_IMAGE
     description : ...
-    params : CameraIdentifier,ImageFormat,ColourMode,CompressionType,CompressionLevel,DownampleMode
+    params : CameraIdentifier,ImageFormat,ColourMode,CompressionType,CompressionLevel,DownSampleMode
     ranges : 11,13,1,5,1,2,1,4,1,100,1,2
   - id   : 4
     code  : TFRD
@@ -97,3 +97,28 @@ telecommand:
     params : WheelNo,SteeringPosAngle,Velocity
     ranges : 1,4,-12,12,-20,20
 
+telemanipulation: 
+  - id   : 20
+    code  : LOST
+    name : Locomotion_Stop
+    description : ...
+    params : 0
+    ranges : 0
+  - id   : 21
+    code  : LOMC
+    name : Locomotion_Move_Crab
+    description : ...
+    params : RoverVelocity,CrabAngle
+    ranges : 0,0.5,-12,12
+  - id   : 22
+    code  : LOMA
+    name : Locomotion_Move_Ackermann
+    description : ...
+    params : RoverVelocity,VirtualAngle
+    ranges : -0.1,0.1,-12,12
+  - id   : 23
+    code  : LORO
+    name : Locomotion_Skid_Rotate_To
+    description : ...
+    params : RotationSpeed
+    ranges : 0,2
